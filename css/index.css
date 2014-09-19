@@ -1,5 +1,1 @@
-#editor {
-        position: absolute;
-        width: 500px;
-        height: 400px;
-    }
+#editor,#result {position: relative; height: 400px; }
