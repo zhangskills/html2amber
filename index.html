@@ -1,39 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>html2amber</title>
+	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./css/index.css">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
 </head>
 <body>
-	<div>sssss
-		<span>wwwww</span>
-	</div>
-	<div>
-		<textarea name="" id="editor" cols="30" rows="10">
 
-<div>div0
-	<p>p0
-	p1
-	p2
-	p3
-	<a href="">asdf
-<span>www</span>
-	</a>
-	p4
-	</p>
-	div4
-	div5
-	div6
-</div>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+				<textarea name="" id="editor" cols="30" rows="10">
+					<div class="panel panel-default">
+						<div class="panel-heading">Panel heading without title</div>
+						<div class="panel-body">Panel content</div>
+					</div>
 
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Panel title</h3>
+						</div>
+						<div class="panel-body">Panel content</div>
+					</div>
+				</textarea>
+			</div>
 
-		</textarea>
+			<div class="col-md-6">
+				<textarea name="" id="result" cols="30" rows="10" style="position:relative;min-height:500px;">
+				</textarea>
+			</div>
+		</div>
 	</div>
-	<div id="result">
-		
-	</div>
-	
+	<button type="button" id="handle">转换</button>
+
 	<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="./js/ace/ace.js"></script>
 	<script src="./js/index.js"></script>
 </body>
 </html>
