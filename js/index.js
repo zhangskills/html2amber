@@ -6,7 +6,6 @@ var str2dom = function(str) {
 var convert = function() {
 	var html = $('#editor').val();
 	e = $(html)
-	console.log(e)
 	var s = show(e)
 	console.log(s)
 };
@@ -30,23 +29,42 @@ var show = function(e, depth) {
 	e.each(function() {
 		var t = $(this)
 		var tagName = t.get(0).tagName
-		if (!tagName) {
-			tagName = '==|'
+		s += getPrefixTab(depth)
+		if (tagName) {
+			s += tagName
 		}
-		s += getPrefixTab(depth) + tagName
 		if (t.get(0).childElementCount > 0) {
-			s += '\n' + show(t.contents(), depth + 1)
+			s += show(t.contents(), depth + 1)
 		} else {
-			// console.log(t.get(0).textContent)
 			var lines = t.get(0).textContent.split('\n')
+			var rLines = []
 			for (var i = 0; i < lines.length; i++) {
-				var line = lines[i].replace(/(^\s*)|(\s*$)/g, '');
+				var line = lines[i].replace(/(^\s+)|(\s+$)/g, '')
 				if (line) {
-					s += '\n' + getPrefixTab(depth) + '|\t' + line
+					rLines.push(line)
 				}
 			}
+			// console.log(tagName, t.get(0).textContent, lines, rLines)
+			if (rLines.length == 1) {
+				if (tagName) {
+					s += '\t' + rLines[0]
+				} else {
+					s += '\n' + getPrefixTab(depth) + '| ' + rLines[0]
+				}
+			} else {
+				for (var i = 0; i < rLines.length; i++) {
+					var line = rLines[i]
+					if (line) {
+						s += '\n'
+						if (tagName) {
+							s += '\t'
+						}
+						s += getPrefixTab(depth) + '| ' + line
+					}
+				}
+			}
+			s+='\n'
 		}
-		s += '\n'
 	})
 	return s
 }
