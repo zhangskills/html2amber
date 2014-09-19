@@ -5,7 +5,7 @@ $(function() {
 	editor.getSession().setMode("ace/mode/html");
 
 	var resultE = ace.edit('result')
-	// resultE.setTheme("ace/theme/monokai");
+		// resultE.setTheme("ace/theme/monokai");
 	resultE.getSession().setMode("ace/mode/jade");
 	resultE.setReadOnly(true);
 
@@ -46,7 +46,13 @@ $(function() {
 				for (var j = 0; j < attrVals.length; j++) {
 					var attrVal = attrVals[j]
 					if (attrVal) {
-						s += '[' + attrName + '="' + attrVal + '"]'
+						if (attrName == 'id') {
+							s += '#' + attrVal
+						} else if (attrName == 'class') {
+							s += '.' + attrVal
+						} else {
+							s += '[' + attrName + '="' + attrVal + '"]'
+						}
 					}
 				}
 			}
