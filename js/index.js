@@ -15,8 +15,8 @@ $(function() {
 		e = $(html);
 		var s = show(e);
 
-		resultE.setValue(s)
-		console.log(s)
+		resultE.setValue(s.substr(1))
+		// console.log(s.substr(1))
 	};
 
 	var getPrefixTab = function(num) {
