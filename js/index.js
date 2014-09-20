@@ -57,15 +57,18 @@ $(function() {
 		} else if (e.attributes.length > 0) {
 			var attrs = e.attributes;
 			foreach(attrs, function(attr) {
+				var tagName = attr.name.toLowerCase();
+				if (tagName == 'id') {
+					tagName = '#'
+				} else if (tagName == 'class') {
+					tagName = '.'
+				} else {
+					s += '[' + tagName + '="' + attr.value + '"]';
+					return
+				}
 				foreach(attr.value.split(/\s+/), function(attrVal) {
 					if (attrVal) {
-						if (attr.name == 'class') {
-							s += '.' + attrVal;
-						} else if (attr.name == 'id') {
-							s += '#' + attrVal;
-						} else {
-							s += '[' + attr.name + '="' + attrVal + '"]';
-						}
+						s += tagName + attrVal
 					}
 				});
 			});
