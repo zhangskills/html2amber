@@ -84,10 +84,12 @@ $(function() {
 				s += prefix + show(t.contents(), depth + 1)
 			} else {
 				var lines = getTagContentLines(t)
-				if (lines.length == 1) {
-					s += prefix + ' ' + lines[0]
-				} else if (lines.length > 1) {
+				if (tagNameAndAttr) {
 					s += prefix
+				}
+				if (lines.length == 1) {
+					s += ' ' + lines[0]
+				} else if (lines.length > 1) {
 					for (var i = 0; i < lines.length; i++) {
 						if (lines[i]) {
 							s += '\n' + prefixTab + '| ' + lines[i]
