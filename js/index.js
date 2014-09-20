@@ -20,11 +20,11 @@ $(function() {
 	};
 
 	var getPrefixTab = function(num) {
-		var s = ''
+		var s = '';
 		for (var i = 0; i < num; i++) {
-			s += '\t'
+			s += '\t';
 		}
-		return s
+		return s;
 	};
 	var trim = function(s) {
 		return s.replace(/(^\s*)|(\s*$)/g, '');
@@ -36,71 +36,72 @@ $(function() {
 	};
 
 	var getTagContentLines = function(e) {
-		var lines = trim(e.get(0).textContent).split('\n')
-		var rLines = []
+		var lines = trim(e.textContent).split('\n');
+		var rLines = [];
 		foreach(lines, function(line) {
 			if (line) {
-				rLines.push(line)
+				rLines.push(line);
 			}
 		});
-		// console.log(lines, rLines)
-		return rLines
+		// console.log(lines, rLines);
+		return rLines;
 	};
 
 	var getTagNameAndAttr = function(e) {
-		var nodeName = e.get(0).nodeName;
+		var nodeName = e.nodeName;
 		var s = nodeName.toLowerCase();
 		if (s == '#comment') {
 			return '//';
 		} else if (nodeName.indexOf('#') == 0) {
-			return ''
-		} else if (e.get(0).attributes.length > 0) {
-			var attrs = e.get(0).attributes;
+			return '';
+		} else if (e.attributes.length > 0) {
+			var attrs = e.attributes;
 			foreach(attrs, function(attr) {
 				foreach(attr.value.split(/\s+/), function(attrVal) {
 					if (attrVal) {
 						if (attr.name == 'class') {
-							s += '.' + attrVal
+							s += '.' + attrVal;
 						} else if (attr.name == 'id') {
-							s += '#' + attrVal
+							s += '#' + attrVal;
 						} else {
-							s += '[' + attr.name + '="' + attrVal + '"]'
+							s += '[' + attr.name + '="' + attrVal + '"]';
 						}
 					}
 				});
 			});
 		}
+		// console.log(s);
 		return s;
 	};
 
 
 	var show = function(e, depth) {
 		if (!depth) {
-			depth = 0
+			depth = 0;
 		}
-		var s = ''
+		var s = '';
 		e.each(function() {
-			var t = $(this)
-			var prefixTab = getPrefixTab(depth)
-			var tagNameAndAttr = getTagNameAndAttr(t);
+			var t = $(this);
+			var prefixTab = getPrefixTab(depth);
+			var tagNameAndAttr = getTagNameAndAttr(t.get(0));
 			var prefix = '';
 			if (tagNameAndAttr) {
 				prefix = '\n' + prefixTab + tagNameAndAttr;
 			}
 
 			if (t.get(0).childElementCount > 0) {
-				s += prefix + show(t.contents(), depth + 1)
+				s += prefix + show(t.contents(), depth + 1);
 			} else {
-				var lines = getTagContentLines(t)
+				var lines = getTagContentLines(t.get(0))
 				if (tagNameAndAttr) {
-					s += prefix + '--'
+					s += prefix;
 				}
-				if (lines.length == 1) {
-					s += ' ' + lines[0]
-				} else if (lines.length > 1) {
+				if (prefix && lines.length == 1) {
+					s += ' ' + lines[0];
+				} else if (lines.length > 0) {
 					foreach(lines, function(line) {
 						if (line) {
-							s += '\n' + prefixTab + '| ' + line
+							s += '\n' + prefixTab + '| ' + line;
 						}
 					});
 				}
