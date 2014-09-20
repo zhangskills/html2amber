@@ -29,16 +29,20 @@ $(function() {
 	var trim = function(s) {
 		return s.replace(/(^\s*)|(\s*$)/g, '');
 	};
+	var foreach = function(items, fn) {
+		for (var i = 0, len = items.length; i < len; i++) {
+			fn(items[i]);
+		}
+	};
 
 	var getTagContentLines = function(e) {
 		var lines = trim(e.get(0).textContent).split('\n')
 		var rLines = []
-		for (var i = 0; i < lines.length; i++) {
-			var line = lines[i];
+		foreach(lines, function(line) {
 			if (line) {
 				rLines.push(line)
 			}
-		}
+		});
 		// console.log(lines, rLines)
 		return rLines
 	};
@@ -52,15 +56,19 @@ $(function() {
 			return ''
 		} else if (e.get(0).attributes.length > 0) {
 			var attrs = e.get(0).attributes;
-			for (var i = 0; i < attrs.length; i++) {
-				var attrVals = attrs[i].value.split(/\s+/);
-				for (var j = 0; j < attrVals.length; j++) {
-					var attrVal = attrVals[j]
+			foreach(attrs, function(attr) {
+				foreach(attr.value.split(/\s+/), function(attrVal) {
 					if (attrVal) {
-						s += '[' + attrs[i].name + '="' + attrVal + '"]'
+						if (attr.name == 'class') {
+							s += '.' + attrVal
+						} else if (attr.name == 'id') {
+							s += '#' + attrVal
+						} else {
+							s += '[' + attr.name + '="' + attrVal + '"]'
+						}
 					}
-				}
-			}
+				});
+			});
 		}
 		return s;
 	};
@@ -85,16 +93,16 @@ $(function() {
 			} else {
 				var lines = getTagContentLines(t)
 				if (tagNameAndAttr) {
-					s += prefix
+					s += prefix + '--'
 				}
 				if (lines.length == 1) {
 					s += ' ' + lines[0]
 				} else if (lines.length > 1) {
-					for (var i = 0; i < lines.length; i++) {
-						if (lines[i]) {
-							s += '\n' + prefixTab + '| ' + lines[i]
+					foreach(lines, function(line) {
+						if (line) {
+							s += '\n' + prefixTab + '| ' + line
 						}
-					}
+					});
 				}
 			}
 		})
