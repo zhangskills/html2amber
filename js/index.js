@@ -4,8 +4,9 @@ $(function() {
 	// editor.setTheme("ace/theme/monokai");
 	editor.getSession().setMode("ace/mode/html");
 
+	editor.setValue('<div class="row">\n <div class="col-xs-12 col-sm-6 col-md-8">.col-xs-12 .col-sm-6 .col-md-8</div>\n <div class="col-xs-6 col-md-4">.col-xs-6 .col-md-4</div>\n </div>\n <div class="row">\n <div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>\n <div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>\n <!-- Optional: clear the XS cols if their content doesn\'t match in height -->\n <div class="clearfix visible-xs-block"></div>\n <div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>\n </div>')
 	var resultE = ace.edit('result')
-	// resultE.setTheme("ace/theme/monokai");
+		// resultE.setTheme("ace/theme/monokai");
 	resultE.getSession().setMode("ace/mode/jade");
 	resultE.setReadOnly(true);
 
@@ -15,6 +16,7 @@ $(function() {
 		var s = show(e);
 
 		resultE.setValue(s)
+		console.log(s)
 	};
 
 	var getPrefixTab = function(num) {
@@ -34,6 +36,7 @@ $(function() {
 				rLines.push(line)
 			}
 		}
+		// console.log(lines, rLines)
 		return rLines
 	};
 	var getTagAttr = function(e) {
@@ -64,9 +67,8 @@ $(function() {
 			var t = $(this)
 			var prefixTab = getPrefixTab(depth)
 			var tagName = t.get(0).tagName
-			s += prefixTab
 			if (tagName) {
-				s += tagName.toLowerCase() + getTagAttr(t)
+				s +='\n'+prefixTab+ tagName.toLowerCase() + getTagAttr(t)
 			}
 			if (t.get(0).childElementCount > 0) {
 				s += show(t.contents(), depth + 1)
@@ -90,11 +92,11 @@ $(function() {
 						}
 					}
 				}
-				s += '\n'
 			}
 		})
 		return s
 	}
 
+	convert();
 	$('#handle').click(convert);
 });
