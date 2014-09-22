@@ -79,7 +79,7 @@ $(function() {
 			if (isEmptyTag(nodeNameAndAttr)) {
 				s += prefixTab + nodeNameAndAttr;
 			} else if (content) {
-				s += prefixTab + nodeNameAndAttr + ' ' + content.replace(/\s+/, ' ') + '\n';
+				s += prefixTab + nodeNameAndAttr + ' ' + content.replace(/\s+/g, ' ') + '\n';
 			}
 		} else if (node.childNodes.length > 1) {
 			s += prefixTab + nodeNameAndAttr + '\n';
