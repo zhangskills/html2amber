@@ -4,6 +4,7 @@ $(function() {
 	// editor.setTheme("ace/theme/monokai");
 	editor.getSession().setMode("ace/mode/html");
 
+	editor.setValue('<div class="row">\n <div class="col-xs-12 col-sm-6 col-md-8">.col-xs-12 .col-sm-6 .col-md-8</div>\n <div class="col-xs-6 col-md-4">.col-xs-6 .col-md-4</div>\n </div>\n <div class="row">\n <div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>\n <div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>\n <!-- Optional: clear the XS cols if their content doesn\'t match in height -->\n <div class="clearfix visible-xs-block"></div>\n <div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>\n </div>')
 	var resultE = ace.edit('result')
 		// resultE.setTheme("ace/theme/monokai");
 	resultE.getSession().setMode("ace/mode/jade");
@@ -15,6 +16,7 @@ $(function() {
 		var s = show(e);
 
 		resultE.setValue(s)
+		// console.log(s)
 	};
 
 	var getPrefixTab = function(num) {
@@ -23,25 +25,34 @@ $(function() {
 			s += '\t'
 		}
 		return s
-	}
+	};
+	var trim = function(s) {
+		return s.replace(/(^\s*)|(\s*$)/g, '');
+	};
 
 	var getTagContentLines = function(e) {
-		var lines = e.get(0).textContent.split('\n')
+		var lines = trim(e.get(0).textContent).split('\n')
 		var rLines = []
 		for (var i = 0; i < lines.length; i++) {
-			var line = lines[i].replace(/(^\s+)|(\s+$)/g, '')
+			var line = lines[i];
 			if (line) {
 				rLines.push(line)
 			}
 		}
+		// console.log(lines, rLines)
 		return rLines
 	};
-	var getTagAttr = function(e) {
-		var s = '';
-		if (e.get(0).attributes.length > 0) {
+
+	var getTagNameAndAttr = function(e) {
+		var nodeName = e.get(0).nodeName;
+		var s = nodeName.toLowerCase();
+		if (s == '#comment') {
+			return '//';
+		} else if (nodeName.indexOf('#') == 0) {
+			return ''
+		} else if (e.get(0).attributes.length > 0) {
 			var attrs = e.get(0).attributes;
 			for (var i = 0; i < attrs.length; i++) {
-				var attrName = attrs[i].name;
 				var attrVals = attrs[i].value.split(/\s+/);
 				for (var j = 0; j < attrVals.length; j++) {
 					var attrVal = attrVals[j]
@@ -69,38 +80,31 @@ $(function() {
 		e.each(function() {
 			var t = $(this)
 			var prefixTab = getPrefixTab(depth)
-			var tagName = t.get(0).tagName
-			s += prefixTab
-			if (tagName) {
-				s += tagName.toLowerCase() + getTagAttr(t)
+			var tagNameAndAttr = getTagNameAndAttr(t);
+			var prefix = '';
+			if (tagNameAndAttr) {
+				prefix = '\n' + prefixTab + tagNameAndAttr;
 			}
+
 			if (t.get(0).childElementCount > 0) {
-				s += show(t.contents(), depth + 1)
+				s += prefix + show(t.contents(), depth + 1)
 			} else {
 				var lines = getTagContentLines(t)
 				if (lines.length == 1) {
-					if (tagName) {
-						s += ' ' + lines[0]
-					} else {
-						s += '\n' + prefixTab + '| ' + lines[0]
-					}
-				} else {
+					s += prefix + ' ' + lines[0]
+				} else if (lines.length > 1) {
+					s += prefix
 					for (var i = 0; i < lines.length; i++) {
-						var line = lines[i]
-						if (line) {
-							s += '\n'
-							if (tagName) {
-								s += '\t'
-							}
-							s += prefixTab + '| ' + line
+						if (lines[i]) {
+							s += '\n' + prefixTab + '| ' + lines[i]
 						}
 					}
 				}
-				s += '\n'
 			}
 		})
 		return s
 	}
 
+	convert();
 	$('#handle').click(convert);
 });
